@@ -3,11 +3,42 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AddressBookSystem
 {
     public class ContactOperations
     {
+        List<AddressBookSystem> listperson = new List<AddressBookSystem>();
+        public void addressRoll(List<AddressBookSystem> ad)
+        {
+            ad.ForEach(addressData =>
+            {
+                Console.WriteLine("Employee being added:" + addressData.empName);
+                this.addressRoll(addressData);
+                Console.WriteLine("Employee added: " + addressData.empName);
+            });
+            Console.WriteLine(this.listperson.ToString());
+        }
+        private void addressRoll(AddressBookSystem address)
+        {
+            listperson.Add(address);
+        }
+        public void addressRollThread(List<AddressBookSystem> ad)
+        {
+            ad.ForEach(addressData =>
+            {
+                Task tread = new Task(() =>
+                {
+                    Console.WriteLine("Employee being added:" + addressData.empName);
+                    this.addressRoll(addressData);
+                    Console.WriteLine("Employee added: " + addressData.empName);
+                });
+                tread.Start();
+
+            });
+            Console.WriteLine(this.listperson.ToString());
+        }
         public static string connectionString = "Data Source=(localDB)\\MSSQLLocalDB;Initial Catalog=AddressBookServiceDB";
         Person per = new Person();
 
